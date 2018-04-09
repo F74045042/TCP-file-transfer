@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
 	//socket connection
 	struct sockaddr_in info;
 	bzero(&info, sizeof(info));
-	info.sin_family = PF_INET;
+	info.sin_family = AF_INET;
 
 	info.sin_addr.s_addr = inet_addr(argv[3]);
 	info.sin_port = htons(argv[4]);

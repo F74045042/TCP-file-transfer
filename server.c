@@ -25,9 +25,11 @@ int main(int argc , char *argv[])
 		int addrlen = sizeof(clientInfo);
 		bzero(&serverInfo,sizeof(serverInfo));
 
-		serverInfo.sin_family = PF_INET;
-		serverInfo.sin_addr.s_addr = inet_addr(argv[3]);
+		serverInfo.sin_family = AF_INET;
+		serverInfo.sin_addr.s_addr = INADDR_ANY;
 		serverInfo.sin_port = htons(argv[4]);
+		printf("[Server] IP: %s\n",  argv[3]);
+		printf("[Server] Port: %s\n",  argv[4]);
 		bind(sockfd,(struct sockaddr *)&serverInfo,sizeof(serverInfo));
 		listen(sockfd,5);
 
