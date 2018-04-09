@@ -18,12 +18,12 @@ int main(int argc, char *argv[]){
 	//socket connection
 	struct sockaddr_in info;
 	bzero(&info, sizeof(info));
-	info.sin_family = AF_INET;
+	info.sin_family = PF_INET;
 
 	info.sin_addr.s_addr = inet_addr(argv[3]);
-	info.sin_port = htons(argv[4]);
+	info.sin_port = htons(atoi(argv[4]));
 	printf("[Client] IP: %s\n",argv[3]);
-	printf("[Client] Port: %s\n",argv[4]);
+	printf("[Client] Port: %d\n",atoi(argv[4]));
 	
 	int err = connect(sockfd, (struct sockaddr *)&info, sizeof(info));
 	if(err == -1){
@@ -39,7 +39,8 @@ int main(int argc, char *argv[]){
 		{
 			printf("[Client] Recv Start.\n");
 			while((nCount = recv(sockfd, buffer, sizeof(buffer), 0)) > 0){
-				fwrite(buffer, sizeof(buffer), nCount, fp);
+				printf("%d\n",nCount);
+                fwrite(buffer, sizeof(buffer), nCount, fp);
 			}
 		}
 		fclose(fp);

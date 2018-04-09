@@ -23,14 +23,18 @@ int main(int argc , char *argv[])
 		//socket connect
 		struct sockaddr_in serverInfo, clientInfo;
 		int addrlen = sizeof(clientInfo);
-		bzero(&serverInfo,sizeof(serverInfo));
+		bzero(&serverInfo, sizeof(serverInfo));
+        bzero(&clientInfo, sizeof(clientInfo));
 
-		serverInfo.sin_family = AF_INET;
-		serverInfo.sin_addr.s_addr = INADDR_ANY;
-		serverInfo.sin_port = htons(argv[4]);
+		serverInfo.sin_family = PF_INET;
+		serverInfo.sin_addr.s_addr = inet_addr(argv[3]);
+		serverInfo.sin_port = htons(atoi(argv[4]));
 		printf("[Server] IP: %s\n",  argv[3]);
-		printf("[Server] Port: %s\n",  argv[4]);
-		bind(sockfd,(struct sockaddr *)&serverInfo,sizeof(serverInfo));
+		printf("[Server] Port: %d\n",  atoi(argv[4]));
+		int bind_err = bind(sockfd,(struct sockaddr *)&serverInfo,sizeof(serverInfo));
+        if(bind_err == -1){
+            printf("[Server] Fail to bind a socket!\n");
+        }
 		listen(sockfd,5);
 
 		//Accept client
@@ -58,10 +62,11 @@ int main(int argc , char *argv[])
 			if(!strcmp(argv[2],"send")){
 				printf("[Server] Send\n");
 				while((nCount = fread(buffer, 1, sizeof(buffer), fp)) > 0){
-					send(forClientSockfd, buffer, nCount, 0);
+					printf("%d\n",nCount);
+                    send(forClientSockfd, buffer, nCount, 0);
 				}
 				printf("[Server] Done.\n");
-				recv(forClientSockfd, buffer, nCount, 0);
+				//recv(forClientSockfd, buffer, nCount, 0);
 
 				//closing 
 				fclose(fp);
